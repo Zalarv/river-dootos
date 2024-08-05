@@ -1,0 +1,71 @@
+#!/bin/sh
+#autostart apps
+#ironbar &
+swaybg -i ~/backgrounds/Ghibli2.jpg &
+pipewire &
+wireplumber &
+pipewire-pulse &
+
+#spawn terminal
+riverctl map normal Super Return spawn foot
+
+#spawn fuzzel
+riverctl map normal Super D spawn fuzzel
+
+#spawn browser
+riverctl map normal Super W spawn brave
+
+#close focused window
+riverctl map normal Super Q close
+
+#fullscreen focused window
+riverctl map normal Super F toggle-fullscreen
+
+#reload config
+riverctl map normal Super+Shift R spawn "~/.config/river/init"
+
+#make window master
+riverctl map normal Super+Shift Return zoom
+
+#exit river
+riverctl map normal Super+Shift E exit
+
+#move/resize focused window
+riverctl map-pointer normal Super BTN_LEFT move-view
+riverctl map-pointer normal Super BTN_RIGHT resize-view
+
+#move focused window
+riverctl map normal Super Right focus-view next
+riverctl map normal Super Left focus-view previous
+
+#toggle float on focused window
+riverctl map normal Super Space toggle-float
+
+for i in $(seq 1 9); do
+  tags=$((1 << ($i - 1)))
+
+  # Super+[1-9] to focus tag [0-8]
+  riverctl map normal Super $i set-focused-tags $tags
+
+  # Super+Shift+[1-9] to tag focused view with tag [0-8]
+  riverctl map normal Super+Shift $i set-view-tags $tags
+
+  # Super+Control+[1-9] to toggle focus of tag [0-8]
+  riverctl map normal Super+Control $i toggle-focused-tags $tags
+
+  # Super+Shift+Control+[1-9] to toggle tag [0-8] of focused view
+  riverctl map normal Super+Shift+Control $i toggle-view-tags $tags
+done
+
+#set focused window to follow cusor
+riverctl focus-follows-cursor normal
+
+#set default layout
+riverctl default-layout rivercarro
+
+#decorations
+riverctl border-color-focused 0x89b482
+riverctl border-color-unfocused 0x32302f
+
+#layout configuration
+rivercarro -outer-gaps 15 -inner-gaps 8 -no-smart-gaps -main-location left -main-count 1 -main-ratio 0.5 &
